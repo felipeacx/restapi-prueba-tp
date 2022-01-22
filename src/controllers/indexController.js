@@ -73,7 +73,13 @@ const loginRequest = async (req, res) => {
   }
 }
 
-const logoutRequest = async (req, res) => {
+const logoutRequest = async (req, res) => {  
+  res.json({
+    status: 200,
+    successful: true,
+    message: "Logout successfully",
+    body: {}
+  })
 }
 
 const newFavorite = async (req, res) => {
