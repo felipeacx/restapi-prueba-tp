@@ -25,6 +25,6 @@ this command allow to run the development server that allow communicate the back
 
 ## About me
 
-Contact me [LinkeIn](https://facebook.github.io/create-react-app/docs/getting-started).
+Contact me [LinkeIn](https://www.linkedin.com/in/felipe-acosta-666858ab/).
 
-Another projects [GitHub](https://reactjs.org/).
+Another projects [GitHub](https://github.com/felipeacx?tab=repositories).
