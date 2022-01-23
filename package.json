@@ -4,13 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon src/index.js"
+    "dev": "nodemon --no-deprecation src/index.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "axios": "^0.25.0",
+    "cors": "^2.8.5",
     "express": "^4.17.2",
     "pg": "^8.7.1"
   },

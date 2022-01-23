@@ -1,5 +1,6 @@
 const { default: axios } = require("axios");
 const { Pool } = require("pg")
+const { encryptString, decryptString } = require("../security/crypto");
 
 const pool = new Pool({
   host: "localhost",
@@ -8,11 +9,6 @@ const pool = new Pool({
   database: "restapi",
   port: "5432"
 })
-
-const getUsers = async (req, res) => {
-  const response = await pool.query("select * from Users");
-  res.status(200).json(response.rows)
-}
 
 const createUser = async (req, res) => {
   try {
@@ -39,11 +35,21 @@ const createUser = async (req, res) => {
 const loginRequest = async (req, res) => {
   try {
     const { email, password } = req.body
+    var encryptPassword = encryptString(password);
+    
     //Get user to validate credentials
     const response = await pool.query("select * from Users where email = $1", [email])
-    if(email === response.rows[0].email && password === response.rows[0].password){
-      const token = btoa(response.rows[0].email)
-      res.json({
+    if(response.rowCount <= 0){
+      return res.status(200).json({
+        status: 200,
+        successful: false,
+        message: "Credentials error",
+        body: {}
+      })
+    }
+    if(email === response.rows[0].email && encryptPassword === response.rows[0].password){
+      const token = encryptString(response.rows[0].email)
+      res.status(200).json({
         status: 200,
         successful: true,
         message: "Login successfully",
@@ -58,7 +64,7 @@ const loginRequest = async (req, res) => {
         }
       })
     }else{
-      res.json({
+      res.status(400).json({
         status: 400,
         successful: false,
         message: "Incorrect credentials ",
@@ -66,7 +72,7 @@ const loginRequest = async (req, res) => {
       })
     }
   } catch (error) {
-    res.json({
+    res.status(400).json({
       status: 400,
       successful: false,
       message: "Error: " + error,
@@ -176,7 +182,6 @@ const getCover = async (req, res) => {
 }
 
 module.exports = {
-  getUsers,
   createUser,
   loginRequest,
   logoutRequest,
