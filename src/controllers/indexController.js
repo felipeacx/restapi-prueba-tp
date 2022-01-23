@@ -249,10 +249,6 @@ const getFavorites = async (req, res) => {
   }
 }
 
-const getCover = async (req, res) => {
-  /* "https://image.tmdb.org/t/p/original/" + poster_path) */
-}
-
 module.exports = {
   getUsers,
   createUser,

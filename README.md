@@ -1,6 +1,7 @@
 # The application
 
 This project was created by Felipe Acosta to evidence of developer knowledge by Teleperformance.
+Develop in NodeJS with Postgres db and the external api to get the best movies [TMDB API](https://www.themoviedb.org/documentation/api)
 
 ## Basics
 
