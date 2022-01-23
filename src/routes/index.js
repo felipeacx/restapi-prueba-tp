@@ -3,7 +3,7 @@ const router = Router()
 const { createUser, loginRequest, logoutRequest, getBestPelis, newFavorite, getFavorites
 } = require("../controllers/indexController")
 
-router.post("/users", createUser)
+router.post("/register", createUser)
 router.post("/login", loginRequest)
 router.post("/logout", logoutRequest)
 router.get("/bestpelis", getBestPelis)

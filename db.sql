@@ -8,10 +8,10 @@ create table Users(
   password varchar(40),
   rol INT
 );
-/* 1 Administrador 2 Usuario */
+/* Administrador: 1, Usuario: 2 */
 insert into Users (name, email, password, rol) values
-  ('Felipe Acosta','felipeacosta@gmail.com','1234',1),
-  ('Gilberto Rodriguez','gilrod@gmail.com','123456',2);
+  ('Felipe Acosta','juanfe1190@gmail.com','94b6006209bc170ba03c0d6528978267',1),
+  ('Gilberto Rodriguez','gilrod@gmail.com','94b6006209bc170ba03c0d6528978267',2);
 
 create table Pelis(
   id serial primary key,

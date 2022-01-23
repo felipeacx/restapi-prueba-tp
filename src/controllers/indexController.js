@@ -13,7 +13,9 @@ const pool = new Pool({
 const createUser = async (req, res) => {
   try {
     const { name, email, password, rol } = req.body
-    await pool.query("insert into Users (name, email, password, rol) values ($1, $2, $3, $4)",[name, email, password, rol])
+    var encryptPassword = encryptString(password);
+    /* Administrador: 1, Usuario: 2 */
+    await pool.query("insert into Users (name, email, password, rol) values ($1, $2, $3, $4)",[name, email, encryptPassword, rol])
     res.json({
       status: 200,
       successful: true,
@@ -35,8 +37,7 @@ const createUser = async (req, res) => {
 const loginRequest = async (req, res) => {
   try {
     const { email, password } = req.body
-    var encryptPassword = encryptString(password);
-    
+    var encryptPassword = encryptString(password);    
     //Get user to validate credentials
     const response = await pool.query("select * from Users where email = $1", [email])
     if(response.rowCount <= 0){
@@ -60,6 +61,7 @@ const loginRequest = async (req, res) => {
             "email": response.rows[0].email,
             "rol": response.rows[0].rol
           },
+          authenticated: true,
           token: token
         }
       })
