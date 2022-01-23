@@ -1,5 +1,4 @@
 create database restapi;
-\c restapi;
 
 create table Users(
   id serial primary key,
@@ -9,6 +8,7 @@ create table Users(
   rol INT
 );
 /* Administrador: 1, Usuario: 2 */
+/* Contraseña por defecto: 123456 */
 insert into Users (name, email, password, rol) values
   ('Felipe Acosta','juanfe1190@gmail.com','94b6006209bc170ba03c0d6528978267',1),
   ('Gilberto Rodriguez','gilrod@gmail.com','94b6006209bc170ba03c0d6528978267',2);

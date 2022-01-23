@@ -10,9 +10,71 @@ const pool = new Pool({
   port: "5432"
 })
 
+const getUsers = async (req, res) => {
+  try {
+    const { token, id } = req.query
+    if(token === undefined || id == undefined || token === "" || id === ""){      
+      return res.json({
+        status: 200,
+        successful: false,
+        message: "Missing token or id",
+        body: {}
+      })
+    }
+    const response = await pool.query("select * from Users where id=$1",[id])
+    if(response.rowCount === 0){
+      return res.json({
+        status: 400,
+        successful: false,
+        message: "The id sent is incorrect",
+        body: {}
+      })
+    }
+    var decrypToken = decryptString(token);
+    if(decrypToken === response.rows[0].email){
+      var users = await pool.query("select * from Users")
+      users = users.rows
+      res.json({
+        status: 200,
+        successful: true,
+        message: "Users collected successfully",
+        body: {
+          users
+        }
+      })
+    }else{
+      res.json({
+        status: 200,
+        successful: false,
+        message: "Invalid token",
+        body: {}
+      })
+    }
+  } catch (error) {
+    res.json({
+      status: 400,
+      successful: false,
+      message: "Error: " + error,
+      body: {}
+    })
+  }
+}
+
 const createUser = async (req, res) => {
   try {
     const { name, email, password, rol } = req.body
+    var users = await pool.query("select * from Users where email=$1",[email])
+    console.log(users,email)
+    if(users.rowCount >= 0){
+      return res.json({
+        status: 200,
+        successful: false,
+        message: "Email already registered",
+        body: {
+          email
+        }
+      })
+    }
     var encryptPassword = encryptString(password);
     /* Administrador: 1, Usuario: 2 */
     await pool.query("insert into Users (name, email, password, rol) values ($1, $2, $3, $4)",[name, email, encryptPassword, rol])
@@ -135,8 +197,16 @@ const newFavorite = async (req, res) => {
       poster_path,
       overview
     } = req.body
-    //Get user to validate credentials
-    await pool.query("insert into Users (user_id,title,release_date,vote_average,vote_count,poster_path,overview) values ($1,$2,$3,$4,$5,$6,$7);", 
+    const response = await pool.query("select * from Pelis where user_id = $1",[user_id]);
+    if(response.rowCount >= 0){
+      return  res.json({
+        status: 200,
+        successful: false,
+        message: "The movie is already registered",
+        body: {}
+      })
+    }
+    await pool.query("insert into Pelis (user_id,title,release_date,vote_average,vote_count,poster_path,overview) values ($1,$2,$3,$4,$5,$6,$7);", 
     [user_id, title, release_date, vote_average, vote_count, poster_path, overview])
     res.json({
       status: 200,
@@ -184,6 +254,7 @@ const getCover = async (req, res) => {
 }
 
 module.exports = {
+  getUsers,
   createUser,
   loginRequest,
   logoutRequest,

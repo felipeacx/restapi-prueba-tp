@@ -1,8 +1,9 @@
 const {Router} = require("express")
 const router = Router()
-const { createUser, loginRequest, logoutRequest, getBestPelis, newFavorite, getFavorites
+const { createUser, loginRequest, logoutRequest, getBestPelis, newFavorite, getFavorites, getUsers
 } = require("../controllers/indexController")
 
+router.get("/users", getUsers)
 router.post("/register", createUser)
 router.post("/login", loginRequest)
 router.post("/logout", logoutRequest)
